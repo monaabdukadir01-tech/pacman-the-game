@@ -7,4 +7,6 @@
 /Users/monamohamed/Desktop/pacman-the-game/src/main/java/dk/sdu/imada/oop26/view/PacmanView.java
 /Users/monamohamed/Desktop/pacman-the-game/src/main/java/dk/sdu/imada/oop26/model/Maze.java
 /Users/monamohamed/Desktop/pacman-the-game/src/main/java/dk/sdu/imada/oop26/view/BackgroundMusic.java
+/Users/monamohamed/Desktop/pacman-the-game/src/main/java/dk/sdu/imada/oop26/controller/GameController.java
+/Users/monamohamed/Desktop/pacman-the-game/src/main/java/dk/sdu/imada/oop26/controller/StartPageController.java
 /Users/monamohamed/Desktop/pacman-the-game/src/main/java/dk/sdu/imada/oop26/model/Pacman.java
