@@ -36,11 +36,13 @@ public class StartPageView {
         welcomeLabel.setStyle("-fx-font-size: " + FONT_SIZE + "; -fx-text-fill: white;");
         root.setTop(welcomeLabel);
 
-        Button startButton = new Button(BUTTON_TEXT);
-        BorderPane.setAlignment(startButton, Pos.BOTTOM_CENTER);
-        startButton.setOnAction(e -> handler.openPacmanScreen());
-        root.setBottom(startButton);
+        Button startsButton = new Button(BUTTON_TEXT);
+        BorderPane.setAlignment(startsButton, Pos.BOTTOM_CENTER);
+        startsButton.setOnAction(e -> {
+            handler.openPacmanScreen();
+        });
 
+        root.setBottom(startsButton);
         return root;
     }
 
@@ -59,4 +61,5 @@ public class StartPageView {
                 size);
         return new Background(bgImage);
     }
+
 }
