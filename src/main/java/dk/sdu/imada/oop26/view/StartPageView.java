@@ -1,5 +1,7 @@
 package dk.sdu.imada.oop26.view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,10 +22,10 @@ public class StartPageView {
     private static final double PADDING = 20;
     private static final double FONT_SIZE = 40;
 
-    private final ViewHandler handler;
+    private final Button startButton;
 
-    public StartPageView(ViewHandler handler) {
-        this.handler = handler;
+    public StartPageView() {
+        this.startButton = new Button(BUTTON_TEXT);
     }
 
     public BorderPane getUi() {
@@ -36,14 +38,14 @@ public class StartPageView {
         welcomeLabel.setStyle("-fx-font-size: " + FONT_SIZE + "; -fx-text-fill: white;");
         root.setTop(welcomeLabel);
 
-        Button startsButton = new Button(BUTTON_TEXT);
-        BorderPane.setAlignment(startsButton, Pos.BOTTOM_CENTER);
-        startsButton.setOnAction(e -> {
-            handler.openPacmanScreen();
-        });
+        BorderPane.setAlignment(startButton, Pos.BOTTOM_CENTER);
+        root.setBottom(startButton);
 
-        root.setBottom(startsButton);
         return root;
+    }
+
+    public void setStartButtonAction(EventHandler<ActionEvent> handler) {
+        startButton.setOnAction(handler);
     }
 
     private Background buildBackground() {
