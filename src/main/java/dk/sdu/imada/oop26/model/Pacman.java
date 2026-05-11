@@ -30,38 +30,73 @@ public class Pacman {
         this.dirY = 0;
     }
 
-    public void moveLeft()  { dirX = -1; dirY =  0; }
-    public void moveRight() { dirX =  1; dirY =  0; }
-    public void moveUp()    { dirX =  0; dirY = -1; }
-    public void moveDown()  { dirX =  0; dirY =  1; }
+    public void moveLeft() {
+        dirX = -1;
+        dirY = 0;
+    }
 
-    public void setVelocityX(int dirX) { this.dirX = dirX; }
-    public void setVelocityY(int dirY) { this.dirY = dirY; }
+    public void moveRight() {
+        dirX = 1;
+        dirY = 0;
+    }
+
+    public void moveUp() {
+        dirX = 0;
+        dirY = -1;
+    }
+
+    public void moveDown() {
+        dirX = 0;
+        dirY = 1;
+    }
+
+    public void setVelocityX(int dirX) {
+        this.dirX = dirX;
+    }
+
+    public void setVelocityY(int dirY) {
+        this.dirY = dirY;
+    }
 
     public void update() {
         double newX = x + dirX * speed;
         double newY = y + dirY * speed;
 
-        if (canMoveTo(newX, y)) x = newX;
-        if (canMoveTo(x, newY)) y = newY;
+        if (canMoveTo(newX, y)) {
+            x = newX;
+        }
+        if (canMoveTo(x, newY)) {
+            y = newY;
+        }
     }
 
     private boolean canMoveTo(double newX, double newY) {
         int tileSize = Maze.TILE_SIZE;
 
-        int topLeftRow     = (int) (newY / tileSize);
-        int topLeftCol     = (int) (newX / tileSize);
+        int topLeftRow = (int) (newY / tileSize);
+        int topLeftCol = (int) (newX / tileSize);
         int bottomRightRow = (int) ((newY + SIZE - 1) / tileSize);
         int bottomRightCol = (int) ((newX + SIZE - 1) / tileSize);
 
-        boolean topLeftIsWall     = Maze.TILE_MAP[topLeftRow].charAt(topLeftCol) == 'x';
+        boolean topLeftIsWall = Maze.TILE_MAP[topLeftRow].charAt(topLeftCol) == 'x';
         boolean bottomRightIsWall = Maze.TILE_MAP[bottomRightRow].charAt(bottomRightCol) == 'x';
 
         return !topLeftIsWall && !bottomRightIsWall;
     }
 
-    public int getDirX() { return dirX; }
-    public int getDirY() { return dirY; }
-    public double getX() { return x; }
-    public double getY() { return y; }
+    public int getDirX() {
+        return dirX;
+    }
+
+    public int getDirY() {
+        return dirY;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
 }
