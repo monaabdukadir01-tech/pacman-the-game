@@ -10,22 +10,21 @@ import javafx.stage.Stage;
 
 public class ViewHandler {
 
-    private static final String TITLE_START = "Pac-Man – Start";
-    private static final String TITLE_GAME  = "Pac-Man";
+    private static final String TITLE_START = "Pac-Man Start";
+    private static final String TITLE_GAME = "Pac-Man";
 
     private final Stage stage;
     private final StartPageView startPageView;
 
     public ViewHandler(Stage stage) {
-        this.stage         = stage;
+        this.stage = stage;
         this.startPageView = new StartPageView();
-
         new StartPageController(startPageView, this);
     }
 
     public void openStartScreen() {
         BorderPane region = startPageView.getUi();
-        int width  = Maze.COLS * Maze.TILE_SIZE;
+        int width = Maze.COLS * Maze.TILE_SIZE;
         int height = Maze.ROWS * Maze.TILE_SIZE;
         Scene scene = new Scene(region, width, height);
         stage.setTitle(TITLE_START);
@@ -34,11 +33,10 @@ public class ViewHandler {
     }
 
     public void openPacmanScreen() {
-        PacmanView pacmanView  = new PacmanView();
+        PacmanView pacmanView = new PacmanView();
         GameController gameCtrl = new GameController(pacmanView);
-        Pane pane              = gameCtrl.startGame();
-
-        int width  = Maze.COLS * Maze.TILE_SIZE;
+        Pane pane = gameCtrl.startGame();
+        int width = Maze.COLS * Maze.TILE_SIZE;
         int height = Maze.ROWS * Maze.TILE_SIZE;
         Scene scene = new Scene(pane, width, height);
         stage.setTitle(TITLE_GAME);

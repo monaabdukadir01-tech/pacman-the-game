@@ -16,51 +16,50 @@ import javafx.scene.layout.BorderPane;
 
 public class StartPageView {
 
-    private static final String THUMBNAIL_PATH = "/images/pacman-thumbnail2.png";
-    private static final String WELCOME_TEXT = "Welcome To Pac-Man";
-    private static final String BUTTON_TEXT = "Start Game";
-    private static final double PADDING = 20;
-    private static final double FONT_SIZE = 40;
-
-    private final Button startButton;
+    private Button enter_button;
+    private BorderPane root;
 
     public StartPageView() {
-        this.startButton = new Button(BUTTON_TEXT);
+        enter_button = new Button("Start Game");
+        root = buildUi();
+    }
+
+    private BorderPane buildUi() {
+        BorderPane pane = new BorderPane();
+        pane.setPadding(new Insets(20, 20, 20, 20));
+
+        String pacman_thumbnail2 = "/images/pacman-thumbnail2.png";
+        Image pacman_thumbnail = new Image(getClass().getResourceAsStream(pacman_thumbnail2));
+        try {
+            if (pacman_thumbnail.isError()) {
+                System.err.println("Billede indlæst med fejl!");
+            }
+        } catch (Exception e) {
+            System.err.println("Kunne ikke indlæse billede: " + e.getMessage());
+        }
+
+        BackgroundSize bsize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true);
+        BackgroundImage backgroundImage = new BackgroundImage(pacman_thumbnail,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, bsize);
+        pane.setBackground(new Background(backgroundImage));
+
+        Label welcome_label = new Label("Welcome To Pac-Man");
+        BorderPane.setAlignment(welcome_label, Pos.CENTER);
+        welcome_label.setStyle("-fx-font-size: 40; -fx-text-fill: white;");
+        pane.setTop(welcome_label);
+
+        BorderPane.setAlignment(enter_button, Pos.BOTTOM_CENTER);
+        pane.setBottom(enter_button);
+
+        return pane;
     }
 
     public BorderPane getUi() {
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(PADDING));
-        root.setBackground(buildBackground());
-
-        Label welcomeLabel = new Label(WELCOME_TEXT);
-        BorderPane.setAlignment(welcomeLabel, Pos.CENTER);
-        welcomeLabel.setStyle("-fx-font-size: " + FONT_SIZE + "; -fx-text-fill: white;");
-        root.setTop(welcomeLabel);
-
-        BorderPane.setAlignment(startButton, Pos.BOTTOM_CENTER);
-        root.setBottom(startButton);
-
         return root;
     }
 
     public void setStartButtonAction(EventHandler<ActionEvent> handler) {
-        startButton.setOnAction(handler);
-    }
-
-    private Background buildBackground() {
-        Image image = new Image(getClass().getResourceAsStream(THUMBNAIL_PATH));
-        if (image.isError()) {
-            System.err.println("Kunne ikke indlæse baggrundsbillede: " + THUMBNAIL_PATH);
-        }
-        BackgroundSize size = new BackgroundSize(
-                BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true);
-        BackgroundImage bgImage = new BackgroundImage(
-                image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                size);
-        return new Background(bgImage);
+        enter_button.setOnAction(handler);
     }
 }
