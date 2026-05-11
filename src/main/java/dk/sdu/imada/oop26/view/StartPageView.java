@@ -62,4 +62,5 @@ public class StartPageView {
     public void setStartButtonAction(EventHandler<ActionEvent> handler) {
         enter_button.setOnAction(handler);
     }
+
 }
