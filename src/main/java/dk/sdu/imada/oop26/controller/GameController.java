@@ -51,10 +51,10 @@ public class GameController {
             public void handle(long now) {
                 if (!gameState.isGameOver()) {
                     pacman.update();
-                    redGhost.update();
-                    pinkGhost.update();
-                    blueGhost.update();
-                    orangeGhost.update();
+                    redGhost.update(pacman.getX(), pacman.getY());
+                    pinkGhost.update(pacman.getX(), pacman.getY());
+                    blueGhost.update(pacman.getX(), pacman.getY());
+                    orangeGhost.update(pacman.getX(), pacman.getY());
 
                     checkPelletCollision();
                     checkGhostCollision();
