@@ -19,33 +19,36 @@ import java.util.function.Consumer;
 public class PacmanView {
 
     private static final int PELLET_OFFSET = 10;
-    private static final int PELLET_SIZE   = 4;
+    private static final int PELLET_SIZE = 4;
+    private static final int POWER_PELLET_SIZE = 12;
 
-    private static final String IMG_WALL         = "/images/wall.png";
-    private static final String IMG_PACMAN_UP    = "/images/pacmanUp.png";
-    private static final String IMG_PACMAN_DOWN  = "/images/pacmanDown.png";
-    private static final String IMG_PACMAN_LEFT  = "/images/pacmanLeft.png";
+    private static final String IMG_WALL = "/images/wall.png";
+    private static final String IMG_PACMAN_UP = "/images/pacmanUp.png";
+    private static final String IMG_PACMAN_DOWN = "/images/pacmanDown.png";
+    private static final String IMG_PACMAN_LEFT = "/images/pacmanLeft.png";
     private static final String IMG_PACMAN_RIGHT = "/images/pacmanRight.png";
-    private static final String IMG_RED_GHOST    = "/images/redGhost.png";
-    private static final String IMG_PINK_GHOST   = "/images/pinkGhost.png";
-    private static final String IMG_BLUE_GHOST   = "/images/blueGhost.png";
+    private static final String IMG_RED_GHOST = "/images/redGhost.png";
+    private static final String IMG_PINK_GHOST = "/images/pinkGhost.png";
+    private static final String IMG_BLUE_GHOST = "/images/blueGhost.png";
     private static final String IMG_ORANGE_GHOST = "/images/orangeGhost.png";
+    private static final String IMG_CHERRY = "/images/cherry.png";
 
-    private final Image imgUp    = new Image(IMG_PACMAN_UP);
-    private final Image imgDown  = new Image(IMG_PACMAN_DOWN);
-    private final Image imgLeft  = new Image(IMG_PACMAN_LEFT);
+    private final Image imgUp = new Image(IMG_PACMAN_UP);
+    private final Image imgDown = new Image(IMG_PACMAN_DOWN);
+    private final Image imgLeft = new Image(IMG_PACMAN_LEFT);
     private final Image imgRight = new Image(IMG_PACMAN_RIGHT);
 
-    private final Image imgRedGhost    = new Image(IMG_RED_GHOST);
-    private final Image imgPinkGhost   = new Image(IMG_PINK_GHOST);
-    private final Image imgBlueGhost   = new Image(IMG_BLUE_GHOST);
+    private final Image imgRedGhost = new Image(IMG_RED_GHOST);
+    private final Image imgPinkGhost = new Image(IMG_PINK_GHOST);
+    private final Image imgBlueGhost = new Image(IMG_BLUE_GHOST);
     private final Image imgOrangeGhost = new Image(IMG_ORANGE_GHOST);
+    private final Image imgCherry = new Image(IMG_CHERRY);
 
     private Consumer<KeyEvent> onKeyPressed;
     private Pane pane;
 
     public Pane getPacmanScreenUi() {
-        int width  = Maze.COLS * Maze.TILE_SIZE;
+        int width = Maze.COLS * Maze.TILE_SIZE;
         int height = Maze.ROWS * Maze.TILE_SIZE;
 
         Canvas canvas = new Canvas(width, height);
@@ -53,7 +56,8 @@ public class PacmanView {
         pane = new Pane(canvas);
         pane.setFocusTraversable(true);
         pane.setOnKeyPressed(e -> {
-            if (onKeyPressed != null) onKeyPressed.accept(e);
+            if (onKeyPressed != null)
+                onKeyPressed.accept(e);
         });
         pane.requestFocus();
 
@@ -70,9 +74,9 @@ public class PacmanView {
     }
 
     public void render(GraphicsContext gc, Pacman pacman, Ghost redGhost, Ghost pinkGhost,
-                       Ghost blueGhost, Ghost orangeGhost, GameState gameState) {
+            Ghost blueGhost, Ghost orangeGhost, GameState gameState) {
 
-        int width  = Maze.COLS * Maze.TILE_SIZE;
+        int width = Maze.COLS * Maze.TILE_SIZE;
         int height = Maze.ROWS * Maze.TILE_SIZE;
         gc.clearRect(0, 0, width, height);
 
@@ -107,15 +111,37 @@ public class PacmanView {
                             r * Maze.TILE_SIZE + PELLET_OFFSET,
                             PELLET_SIZE, PELLET_SIZE);
                 }
+
+                if (tile == ' ' && !gameState.isPelletEaten(r, c)) {
+                    boolean isPowerPellet = (r == 1 && c == 1) ||
+                            (r == 1 && c == 58) ||
+                            (r == 15 && c == 1) ||
+                            (r == 15 && c == 58);
+
+                    if (isPowerPellet) {
+                        gc.setFill(Color.YELLOW);
+                        gc.fillOval(
+                                c * Maze.TILE_SIZE + 6,
+                                r * Maze.TILE_SIZE + 6,
+                                12, 12);
+                    }
+
+                    if (r == 1 && c == 30 && !gameState.isPelletEaten(r, c)) {
+                        gc.drawImage(imgCherry,
+                                c * Maze.TILE_SIZE,
+                                r * Maze.TILE_SIZE,
+                                Maze.TILE_SIZE, Maze.TILE_SIZE);
+                    }
+                }
             }
         }
     }
 
     private void drawGhosts(GraphicsContext gc, Ghost red, Ghost pink, Ghost blue, Ghost orange) {
         int s = Ghost.SIZE;
-        gc.drawImage(imgRedGhost,    red.getX(),    red.getY(),    s, s);
-        gc.drawImage(imgPinkGhost,   pink.getX(),   pink.getY(),   s, s);
-        gc.drawImage(imgBlueGhost,   blue.getX(),   blue.getY(),   s, s);
+        gc.drawImage(imgRedGhost, red.getX(), red.getY(), s, s);
+        gc.drawImage(imgPinkGhost, pink.getX(), pink.getY(), s, s);
+        gc.drawImage(imgBlueGhost, blue.getX(), blue.getY(), s, s);
         gc.drawImage(imgOrangeGhost, orange.getX(), orange.getY(), s, s);
     }
 
@@ -125,10 +151,14 @@ public class PacmanView {
     }
 
     private Image getPacmanImage(Pacman pacman) {
-        if (pacman.getDirX() ==  1) return imgRight;
-        if (pacman.getDirX() == -1) return imgLeft;
-        if (pacman.getDirY() == -1) return imgUp;
-        if (pacman.getDirY() ==  1) return imgDown;
+        if (pacman.getDirX() == 1)
+            return imgRight;
+        if (pacman.getDirX() == -1)
+            return imgLeft;
+        if (pacman.getDirY() == -1)
+            return imgUp;
+        if (pacman.getDirY() == 1)
+            return imgDown;
         return imgRight;
     }
 

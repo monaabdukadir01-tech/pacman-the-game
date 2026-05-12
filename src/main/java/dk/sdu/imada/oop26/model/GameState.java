@@ -1,11 +1,15 @@
 package dk.sdu.imada.oop26.model;
 
+import java.util.Random;
+
 public class GameState {
 
     private int score;
     private int lives;
     private boolean gameOver;
     private boolean[][] pelletsEaten;
+    private int cherryRow = -1;
+    private int cherryCol = -1;
 
     public GameState() {
         this.score = 0;
@@ -14,12 +18,25 @@ public class GameState {
         this.pelletsEaten = new boolean[Maze.ROWS][Maze.COLS];
     }
 
-    public int getScore() { return score; }
-    public int getLives() { return lives; }
-    public boolean isGameOver() { return gameOver; }
-    public boolean[][] getPelletsEaten() { return pelletsEaten; }
+    public int getScore() {
+        return score;
+    }
 
-    public void addScore(int points) { this.score += points; }
+    public int getLives() {
+        return lives;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean[][] getPelletsEaten() {
+        return pelletsEaten;
+    }
+
+    public void addScore(int points) {
+        this.score += points;
+    }
 
     public void loseLife() {
         this.lives--;
@@ -34,5 +51,14 @@ public class GameState {
 
     public void eatPellet(int row, int col) {
         pelletsEaten[row][col] = true;
+    }
+
+    public boolean isCherry(int row, int col) { // Tjek om det er kirsebær
+        return row == cherryRow && col == cherryCol; // Tjekker om det er kirsebær
+    }
+
+    public void eatCherry() { // Spis kirsebær
+        cherryRow = -1; // Fjern kirsebær
+        cherryCol = -1; // Fjern kirsebær
     }
 }

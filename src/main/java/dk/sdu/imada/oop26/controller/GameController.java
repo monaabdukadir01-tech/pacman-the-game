@@ -26,15 +26,15 @@ public class GameController {
     private final BackgroundMusic backgroundMusic;
 
     public GameController(PacmanView view) {
-        this.view            = view;
-        this.pacman          = new Pacman();
-        this.redGhost        = new Ghost(28);
-        this.pinkGhost       = new Ghost(29);
-        this.blueGhost       = new Ghost(30);
-        this.orangeGhost     = new Ghost(31);
-        this.gameState       = new GameState();
+        this.view = view;
+        this.pacman = new Pacman();
+        this.redGhost = new Ghost(28);
+        this.pinkGhost = new Ghost(29);
+        this.blueGhost = new Ghost(30);
+        this.orangeGhost = new Ghost(31);
+        this.gameState = new GameState();
         this.pacmanController = new PacmanController(pacman);
-        this.backgroundMusic  = new BackgroundMusic();
+        this.backgroundMusic = new BackgroundMusic();
 
         view.setOnKeyPressed(e -> pacmanController.handleKey(e));
     }
@@ -75,7 +75,21 @@ public class GameController {
         if (Maze.TILE_MAP[row].charAt(col) == ' ' && !gameState.isPelletEaten(row, col)) {
             gameState.eatPellet(row, col);
             gameState.addScore(10);
+
+            boolean isPowerPellet = (row == 1 && col == 1) ||
+                    (row == 1 && col == 58) ||
+                    (row == 15 && col == 1) ||
+                    (row == 15 && col == 58);
+
+            boolean isCherry = (row == 1 && col == 30);
+
+            if (isCherry) {
+                gameState.addScore(500);
+            } else if (isPowerPellet) {
+                gameState.addScore(100);
+            }
         }
+
     }
 
     private void checkGhostCollision() {
@@ -99,9 +113,13 @@ public class GameController {
         pacman.setVelocityX(0);
         pacman.setVelocityY(0);
 
-        redGhost.reset();    redGhost.setRandomDirection();
-        pinkGhost.reset();   pinkGhost.setRandomDirection();
-        blueGhost.reset();   blueGhost.setRandomDirection();
-        orangeGhost.reset(); orangeGhost.setRandomDirection();
+        redGhost.reset();
+        redGhost.setRandomDirection();
+        pinkGhost.reset();
+        pinkGhost.setRandomDirection();
+        blueGhost.reset();
+        blueGhost.setRandomDirection();
+        orangeGhost.reset();
+        orangeGhost.setRandomDirection();
     }
 }
