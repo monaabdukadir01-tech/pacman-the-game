@@ -13,11 +13,12 @@ public class PacmanController {
 
     public void handleKey(KeyEvent e) {
         switch (e.getCode()) {
-            case LEFT,  A -> pacman.moveLeft();
+            case LEFT, A -> pacman.moveLeft();
             case RIGHT, D -> pacman.moveRight();
-            case UP,    W -> pacman.moveUp();
-            case DOWN,  S -> pacman.moveDown();
-            default -> {}
+            case UP, W -> pacman.moveUp();
+            case DOWN, S -> pacman.moveDown();
+            default -> {
+            } // Ignore other keys
         }
     }
 }
