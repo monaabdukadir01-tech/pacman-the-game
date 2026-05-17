@@ -47,7 +47,7 @@ public class GameState {
         this.score += points;
     }
 
-    public void loseLife(long nowNs) { // 
+    public void loseLife(long nowNs) {  
         this.lives--;
         if (this.lives <= 0) {
             this.gameOver = true;

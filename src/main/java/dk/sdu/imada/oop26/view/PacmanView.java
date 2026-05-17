@@ -139,11 +139,11 @@ public class PacmanView {
         }
     }
 
-    // ← ÆNDRET – gameState tilføjet som parameter
+    
     private void drawGhosts(GraphicsContext gc, Ghost red, Ghost pink, Ghost blue, Ghost orange, GameState gameState) {
         int s = Ghost.SIZE;
 
-        // ← NY – vis scaredGhost billede hvis state er POWER, ellers normalt billede
+        // vis scaredGhost billede hvis state er POWER, ellers normalt billede
         if (gameState.getState().equals("POWER")) {
             if (!red.isEaten())    gc.drawImage(imgScaredGhost, red.getX(),    red.getY(),    s, s);
             if (!pink.isEaten())   gc.drawImage(imgScaredGhost, pink.getX(),   pink.getY(),   s, s);
@@ -182,13 +182,13 @@ public class PacmanView {
             gc.fillText("Lives: " + gameState.getLives(), 10, 50);
         }
 
-        // ← NY – vis POWER indikator
+        //  vis POWER indikator
         if (gameState.getState().equals("POWER")) {
             gc.setFill(Color.CYAN);
             gc.fillText("POWER!", 10, 80);
         }
 
-        // ← NY – vis IMMUNE indikator
+        //  vis IMMUNE indikator
         if (gameState.getState().equals("IMMUNE")) {
             gc.setFill(Color.WHITE);
             gc.fillText("IMMUNE", 10, 80);
