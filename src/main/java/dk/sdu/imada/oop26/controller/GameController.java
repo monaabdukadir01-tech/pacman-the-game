@@ -49,10 +49,10 @@ public class GameController {
 
         new AnimationTimer() {
             public void handle(long now) {
-                gameState.tick(now); // ← NY – opdaterer POWER og IMMUNE timere
+                gameState.tick(now); // opdaterer POWER og IMMUNE timere
 
                 if (!gameState.isGameOver()) {
-                    // ← NY – sæt scared på alle ghosts hvis state er POWER
+                    // sæt scared på alle ghosts hvis state er POWER
                     boolean scared = gameState.getState().equals("POWER");
                     redGhost.setScared(scared);
                     pinkGhost.setScared(scared);
@@ -65,8 +65,8 @@ public class GameController {
                     blueGhost.update(pacman.getX(), pacman.getY());
                     orangeGhost.update(pacman.getX(), pacman.getY());
 
-                    checkPelletCollision(now); // ← ÆNDRET
-                    checkGhostCollision(now);  // ← ÆNDRET
+                    checkPelletCollision(now); 
+                    checkGhostCollision(now);  
                 }
                 view.render(gc, pacman, redGhost, pinkGhost, blueGhost, orangeGhost, gameState);
             }
@@ -94,13 +94,13 @@ public class GameController {
                 gameState.addScore(500);
             } else if (isPowerPellet) {
                 gameState.addScore(100);
-                gameState.activatePower(now); // ← NY – aktiverer POWER state
+                gameState.activatePower(now); // aktiverer POWER state
             }
         }
     }
 
     private void checkGhostCollision(long now) {
-        // ← NY – i IMMUNE state sker der ingenting
+        // i IMMUNE state sker der ingenting
         if (gameState.getState().equals("IMMUNE")) {
             return;
         }
@@ -109,14 +109,14 @@ public class GameController {
                 || collision(blueGhost) || collision(orangeGhost)) {
 
             if (gameState.getState().equals("POWER")) {
-                // ← NY – spis den ghost Pacman rammer og giv 100 point
+                // spis den ghost Pacman rammer og giv 100 point
                 if (collision(redGhost))    { redGhost.getEaten();    gameState.addScore(100); }
                 if (collision(pinkGhost))   { pinkGhost.getEaten();   gameState.addScore(100); }
                 if (collision(blueGhost))   { blueGhost.getEaten();   gameState.addScore(100); }
                 if (collision(orangeGhost)) { orangeGhost.getEaten(); gameState.addScore(100); }
             } else {
                 // NORMAL state – mist et liv
-                gameState.loseLife(now); // ← ÆNDRET
+                gameState.loseLife(now); // 
                 if (!gameState.isGameOver()) {
                     resetPositions();
                 }
@@ -126,7 +126,7 @@ public class GameController {
 
     private boolean collision(Ghost ghost) {
         if (ghost.isEaten()) {
-            return false; // ← NY – spiste ghosts kan ikke kollidere
+            return false; // spiste ghosts kan ikke kollidere
         }
         double dx = ghost.getX() - pacman.getX();
         double dy = ghost.getY() - pacman.getY();

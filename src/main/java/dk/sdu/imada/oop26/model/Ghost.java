@@ -51,7 +51,7 @@ public class Ghost {
             dirX = 0;
             dirY = -1;
         } else if (scared) {
-            fleePacman(pacmanX, pacmanY); // ← NY – løb væk hvis scared
+            fleePacman(pacmanX, pacmanY); // løb væk hvis scared
         } else if ((System.currentTimeMillis() - startTime) / 1000.0 >= 10) {
             chasePacman(pacmanX, pacmanY);
         }
@@ -99,7 +99,7 @@ public class Ghost {
         }
     }
 
-    // ← NY – bevæg ghost væk fra Pacman (modsat retning af chase)
+    // bevæg ghost væk fra Pacman (modsat retning af chase)
     private void fleePacman(double pacmanX, double pacmanY) {
         int wantedDirX = 0;
         int wantedDirY = 0;
@@ -110,27 +110,30 @@ public class Ghost {
         if (distanceX > distanceY) {
             if (pacmanX > x) {
                 wantedDirX = -1;
-            } else {
-                wantedDirX = 1;
-            }
-            wantedDirY = 0;
         } else {
+            wantedDirX = 1;
+        }
+        wantedDirY = 0;
+        } 
+        else {
             wantedDirX = 0;
             if (pacmanY > y) {
                 wantedDirY = -1;
-            } else {
-                wantedDirY = 1;
-            }
-        }
-
-        double nextX = x + wantedDirX * speed;
-        double nextY = y + wantedDirY * speed;
-
-        if (!isWall(nextX, nextY)) {
-            dirX = wantedDirX;
-            dirY = wantedDirY;
+        } else {
+            wantedDirY = 1;
         }
     }
+
+    double nextX = x + wantedDirX * speed;
+    double nextY = y + wantedDirY * speed;
+
+    if (!isWall(nextX, nextY)) {
+        dirX = wantedDirX;
+        dirY = wantedDirY;
+    } else {
+        pickRandomDirection(); // vælg tilfældig retning hvis vej er blokeret
+    }
+}
 
     private boolean isWall(double newX, double newY) {
         int tileX = (int) (newX / Maze.TILE_SIZE);
@@ -140,14 +143,18 @@ public class Ghost {
             return true;
         }
 
+        // Hvis ghost er ude af boksen, må den ikke komme ind igen
         if (exited && tileY >= 7 && tileY <= 12 && tileX >= 26 && tileX <= 35) {
             return true;
         }
 
-        return Maze.TILE_MAP[tileY].charAt(tileX) == 'x';
+        char tile = Maze.TILE_MAP[tileY].charAt(tileX);
+
+        // 'x' er væg, 'O' er power pellet og behandles også som væg for ghosts
+        return tile == 'x' || tile == 'O';
     }
 
-    // ← NY – kaldes når Pacman spiser ghost i POWER state
+    // kaldes når Pacman spiser ghost i POWER state
     public void getEaten() {
         eaten     = true;
         eatenTime = System.nanoTime();
