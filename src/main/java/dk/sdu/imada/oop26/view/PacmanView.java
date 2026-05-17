@@ -31,6 +31,7 @@ public class PacmanView {
     private static final String IMG_PINK_GHOST = "/images/pinkGhost.png";
     private static final String IMG_BLUE_GHOST = "/images/blueGhost.png";
     private static final String IMG_ORANGE_GHOST = "/images/orangeGhost.png";
+    private static final String IMG_SCARED_GHOST = "/images/scaredGhost.png"; 
     private static final String IMG_CHERRY = "/images/cherry.png";
 
     private final Image imgUp = new Image(IMG_PACMAN_UP);
@@ -42,6 +43,7 @@ public class PacmanView {
     private final Image imgPinkGhost = new Image(IMG_PINK_GHOST);
     private final Image imgBlueGhost = new Image(IMG_BLUE_GHOST);
     private final Image imgOrangeGhost = new Image(IMG_ORANGE_GHOST);
+    private final Image imgScaredGhost = new Image(IMG_SCARED_GHOST); 
     private final Image imgCherry = new Image(IMG_CHERRY);
 
     private Consumer<KeyEvent> onKeyPressed;
@@ -87,23 +89,23 @@ public class PacmanView {
 
         Image wallImage = new Image(getClass().getResourceAsStream(IMG_WALL));
         drawMaze(gc, wallImage, gameState);
-        drawGhosts(gc, redGhost, pinkGhost, blueGhost, orangeGhost);
+        drawGhosts(gc, redGhost, pinkGhost, blueGhost, orangeGhost, gameState); 
         drawPacman(gc, pacman);
         drawHud(gc, gameState);
     }
-
-    // ── Drawing helpers ───────────────────────────────────────────────
 
     private void drawMaze(GraphicsContext gc, Image wallImage, GameState gameState) {
         for (int r = 0; r < Maze.TILE_MAP.length; r++) {
             String row = Maze.TILE_MAP[r];
             for (int c = 0; c < row.length(); c++) {
                 char tile = row.charAt(c);
+
                 if (tile == 'x') {
                     gc.drawImage(wallImage,
                             c * Maze.TILE_SIZE, r * Maze.TILE_SIZE,
                             Maze.TILE_SIZE, Maze.TILE_SIZE);
                 }
+
                 if (tile == ' ' && !gameState.isPelletEaten(r, c)) {
                     gc.setFill(Color.WHITE);
                     gc.fillOval(
@@ -137,12 +139,22 @@ public class PacmanView {
         }
     }
 
-    private void drawGhosts(GraphicsContext gc, Ghost red, Ghost pink, Ghost blue, Ghost orange) {
+    
+    private void drawGhosts(GraphicsContext gc, Ghost red, Ghost pink, Ghost blue, Ghost orange, GameState gameState) {
         int s = Ghost.SIZE;
-        gc.drawImage(imgRedGhost, red.getX(), red.getY(), s, s);
-        gc.drawImage(imgPinkGhost, pink.getX(), pink.getY(), s, s);
-        gc.drawImage(imgBlueGhost, blue.getX(), blue.getY(), s, s);
-        gc.drawImage(imgOrangeGhost, orange.getX(), orange.getY(), s, s);
+
+        // vis scaredGhost billede hvis state er POWER, ellers normalt billede
+        if (gameState.getState().equals("POWER")) {
+            if (!red.isEaten())    gc.drawImage(imgScaredGhost, red.getX(),    red.getY(),    s, s);
+            if (!pink.isEaten())   gc.drawImage(imgScaredGhost, pink.getX(),   pink.getY(),   s, s);
+            if (!blue.isEaten())   gc.drawImage(imgScaredGhost, blue.getX(),   blue.getY(),   s, s);
+            if (!orange.isEaten()) gc.drawImage(imgScaredGhost, orange.getX(), orange.getY(), s, s);
+        } else {
+            gc.drawImage(imgRedGhost,    red.getX(),    red.getY(),    s, s);
+            gc.drawImage(imgPinkGhost,   pink.getX(),   pink.getY(),   s, s);
+            gc.drawImage(imgBlueGhost,   blue.getX(),   blue.getY(),   s, s);
+            gc.drawImage(imgOrangeGhost, orange.getX(), orange.getY(), s, s);
+        }
     }
 
     private void drawPacman(GraphicsContext gc, Pacman pacman) {
@@ -168,6 +180,18 @@ public class PacmanView {
         gc.fillText("Score: " + gameState.getScore(), 10, 20);
         if (gameState.getLives() > 0) {
             gc.fillText("Lives: " + gameState.getLives(), 10, 50);
+        }
+
+        //  vis POWER indikator
+        if (gameState.getState().equals("POWER")) {
+            gc.setFill(Color.CYAN);
+            gc.fillText("POWER!", 10, 80);
+        }
+
+        //  vis IMMUNE indikator
+        if (gameState.getState().equals("IMMUNE")) {
+            gc.setFill(Color.WHITE);
+            gc.fillText("IMMUNE", 10, 80);
         }
     }
 
