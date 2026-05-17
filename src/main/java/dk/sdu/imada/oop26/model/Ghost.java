@@ -17,9 +17,9 @@ public class Ghost {
     private long startTime = -1;
     private boolean exited = false;
 
-    private boolean scared = false; 
-    private boolean eaten  = false; 
-    private long eatenTime = 0;     
+    private boolean scared = false;
+    private boolean eaten = false;
+    private long eatenTime = 0;
 
     public Ghost(int startCol) {
         this.startX = startCol * Maze.TILE_SIZE;
@@ -32,7 +32,7 @@ public class Ghost {
         // vent inde i boksen i 3 sekunder efter at være spist
         if (eaten) {
             if (System.nanoTime() - eatenTime >= 3_000_000_000L) {
-                eaten  = false;
+                eaten = false;
                 exited = false;
                 startTime = -1;
             }
@@ -67,7 +67,7 @@ public class Ghost {
         }
     }
 
-    private void chasePacman(double pacmanX, double pacmanY) {
+    private void chasePacman(double pacmanX, double pacmanY) { // Move ghost towards Pacman
         int wantedDirX = 0;
         int wantedDirY = 0;
 
@@ -110,30 +110,29 @@ public class Ghost {
         if (distanceX > distanceY) {
             if (pacmanX > x) {
                 wantedDirX = -1;
+            } else {
+                wantedDirX = 1;
+            }
+            wantedDirY = 0;
         } else {
-            wantedDirX = 1;
-        }
-        wantedDirY = 0;
-        } 
-        else {
             wantedDirX = 0;
             if (pacmanY > y) {
                 wantedDirY = -1;
+            } else {
+                wantedDirY = 1;
+            }
+        }
+
+        double nextX = x + wantedDirX * speed;
+        double nextY = y + wantedDirY * speed;
+
+        if (!isWall(nextX, nextY)) {
+            dirX = wantedDirX;
+            dirY = wantedDirY;
         } else {
-            wantedDirY = 1;
+            pickRandomDirection(); // vælg tilfældig retning hvis vej er blokeret
         }
     }
-
-    double nextX = x + wantedDirX * speed;
-    double nextY = y + wantedDirY * speed;
-
-    if (!isWall(nextX, nextY)) {
-        dirX = wantedDirX;
-        dirY = wantedDirY;
-    } else {
-        pickRandomDirection(); // vælg tilfældig retning hvis vej er blokeret
-    }
-}
 
     private boolean isWall(double newX, double newY) {
         int tileX = (int) (newX / Maze.TILE_SIZE);
@@ -156,10 +155,10 @@ public class Ghost {
 
     // kaldes når Pacman spiser ghost i POWER state
     public void getEaten() {
-        eaten     = true;
+        eaten = true;
         eatenTime = System.nanoTime();
-        x    = startX;
-        y    = startY;
+        x = startX;
+        y = startY;
         dirX = 0;
         dirY = -1;
     }
@@ -183,22 +182,34 @@ public class Ghost {
     private void pickRandomDirection() {
         int random = (int) (Math.random() * 4);
         switch (random) {
-            case 0 -> { dirX =  1; dirY =  0; }
-            case 1 -> { dirX = -1; dirY =  0; }
-            case 2 -> { dirX =  0; dirY = -1; }
-            default -> { dirX =  0; dirY =  1; }
+            case 0 -> {
+                dirX = 1;
+                dirY = 0;
+            }
+            case 1 -> {
+                dirX = -1;
+                dirY = 0;
+            }
+            case 2 -> {
+                dirX = 0;
+                dirY = -1;
+            }
+            default -> {
+                dirX = 0;
+                dirY = 1;
+            }
         }
     }
 
     public void reset() {
-        this.x         = startX;
-        this.y         = startY;
-        this.dirX      = 0;
-        this.dirY      = -1;
-        this.exited    = false;
+        this.x = startX;
+        this.y = startY;
+        this.dirX = 0;
+        this.dirY = -1;
+        this.exited = false;
         this.startTime = -1;
-        this.eaten     = false; 
-        this.scared    = false; 
+        this.eaten = false;
+        this.scared = false;
     }
 
     public double getX() {

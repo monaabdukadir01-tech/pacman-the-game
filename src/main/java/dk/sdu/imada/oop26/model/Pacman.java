@@ -50,15 +50,15 @@ public class Pacman {
         dirY = 1;
     }
 
-    public void setVelocityX(int dirX) {
+    public void setVelocityX(int dirX) { // Set horizontal direction
         this.dirX = dirX;
     }
 
-    public void setVelocityY(int dirY) {
+    public void setVelocityY(int dirY) { // Set vertical direction
         this.dirY = dirY;
     }
 
-    public void update() {
+    public void update() { // Move Pacman in the current direction if possible
         double newX = x + dirX * speed;
         double newY = y + dirY * speed;
 
@@ -70,7 +70,8 @@ public class Pacman {
         }
     }
 
-    private boolean canMoveTo(double newX, double newY) {
+    private boolean canMoveTo(double newX, double newY) { // Check if Pacman can move to (newX, newY) without hitting a
+                                                          // wall
         int tileSize = Maze.TILE_SIZE;
 
         int topLeftRow = (int) (newY / tileSize);

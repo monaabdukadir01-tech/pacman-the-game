@@ -14,7 +14,7 @@ public class StartPageController {
         initBindings();
     }
 
-    private void initBindings() {
+    private void initBindings() { // Set the action for the start button to open the Pacman screen
         view.setStartButtonAction(e -> viewHandler.openPacmanScreen());
     }
 }

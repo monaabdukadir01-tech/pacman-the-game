@@ -36,7 +36,8 @@ public class GameController {
         this.pacmanController = new PacmanController(pacman);
         this.backgroundMusic = new BackgroundMusic();
 
-        view.setOnKeyPressed(e -> pacmanController.handleKey(e));
+        view.setOnKeyPressed(e -> pacmanController.handleKey(e)); // Here we set the key event handler for the view to
+                                                                  // control Pacman with the keyboard
     }
 
     public Pane startGame() {
@@ -49,7 +50,7 @@ public class GameController {
 
         new AnimationTimer() {
             public void handle(long now) {
-                gameState.tick(now); // opdaterer POWER og IMMUNE timere
+                gameState.tick(now); // update POWER and IMMUNE timer
 
                 if (!gameState.isGameOver()) {
                     // sæt scared på alle ghosts hvis state er POWER
@@ -65,8 +66,8 @@ public class GameController {
                     blueGhost.update(pacman.getX(), pacman.getY());
                     orangeGhost.update(pacman.getX(), pacman.getY());
 
-                    checkPelletCollision(now); 
-                    checkGhostCollision(now);  
+                    checkPelletCollision(now);
+                    checkGhostCollision(now);
                 }
                 view.render(gc, pacman, redGhost, pinkGhost, blueGhost, orangeGhost, gameState);
             }
@@ -94,7 +95,7 @@ public class GameController {
                 gameState.addScore(500);
             } else if (isPowerPellet) {
                 gameState.addScore(100);
-                gameState.activatePower(now); // aktiverer POWER state
+                gameState.activatePower(now); // activate POWER state
             }
         }
     }
@@ -110,13 +111,25 @@ public class GameController {
 
             if (gameState.getState().equals("POWER")) {
                 // spis den ghost Pacman rammer og giv 100 point
-                if (collision(redGhost))    { redGhost.getEaten();    gameState.addScore(100); }
-                if (collision(pinkGhost))   { pinkGhost.getEaten();   gameState.addScore(100); }
-                if (collision(blueGhost))   { blueGhost.getEaten();   gameState.addScore(100); }
-                if (collision(orangeGhost)) { orangeGhost.getEaten(); gameState.addScore(100); }
+                if (collision(redGhost)) {
+                    redGhost.getEaten();
+                    gameState.addScore(100);
+                }
+                if (collision(pinkGhost)) {
+                    pinkGhost.getEaten();
+                    gameState.addScore(100);
+                }
+                if (collision(blueGhost)) {
+                    blueGhost.getEaten();
+                    gameState.addScore(100);
+                }
+                if (collision(orangeGhost)) {
+                    orangeGhost.getEaten();
+                    gameState.addScore(100);
+                }
             } else {
                 // NORMAL state – mist et liv
-                gameState.loseLife(now); // 
+                gameState.loseLife(now); //
                 if (!gameState.isGameOver()) {
                     resetPositions();
                 }
