@@ -101,7 +101,6 @@ public class GameController {
     }
 
     private void checkGhostCollision(long now) {
-        // i IMMUNE state sker der ingenting
         if (gameState.getState().equals("IMMUNE")) {
             return;
         }
@@ -110,7 +109,7 @@ public class GameController {
                 || collision(blueGhost) || collision(orangeGhost)) {
 
             if (gameState.getState().equals("POWER")) {
-                // spis den ghost Pacman rammer og giv 100 point
+                // POWER state – eat ghost and get point
                 if (collision(redGhost)) {
                     redGhost.getEaten();
                     gameState.addScore(100);
@@ -128,7 +127,7 @@ public class GameController {
                     gameState.addScore(100);
                 }
             } else {
-                // NORMAL state – mist et liv
+                // NORMAL state – mis a life and become IMMUNE for a short time
                 gameState.loseLife(now); //
                 if (!gameState.isGameOver()) {
                     resetPositions();
@@ -139,7 +138,7 @@ public class GameController {
 
     private boolean collision(Ghost ghost) {
         if (ghost.isEaten()) {
-            return false; // spiste ghosts kan ikke kollidere
+            return false; // Eaten ghosts cannot collide with Pacman
         }
         double dx = ghost.getX() - pacman.getX();
         double dy = ghost.getY() - pacman.getY();

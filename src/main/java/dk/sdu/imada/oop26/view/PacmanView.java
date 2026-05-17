@@ -31,7 +31,7 @@ public class PacmanView {
     private static final String IMG_PINK_GHOST = "/images/pinkGhost.png";
     private static final String IMG_BLUE_GHOST = "/images/blueGhost.png";
     private static final String IMG_ORANGE_GHOST = "/images/orangeGhost.png";
-    private static final String IMG_SCARED_GHOST = "/images/scaredGhost.png"; 
+    private static final String IMG_SCARED_GHOST = "/images/scaredGhost.png";
     private static final String IMG_CHERRY = "/images/cherry.png";
 
     private final Image imgUp = new Image(IMG_PACMAN_UP);
@@ -43,10 +43,11 @@ public class PacmanView {
     private final Image imgPinkGhost = new Image(IMG_PINK_GHOST);
     private final Image imgBlueGhost = new Image(IMG_BLUE_GHOST);
     private final Image imgOrangeGhost = new Image(IMG_ORANGE_GHOST);
-    private final Image imgScaredGhost = new Image(IMG_SCARED_GHOST); 
+    private final Image imgScaredGhost = new Image(IMG_SCARED_GHOST);
     private final Image imgCherry = new Image(IMG_CHERRY);
 
-    private Consumer<KeyEvent> onKeyPressed;
+    private Consumer<KeyEvent> onKeyPressed; // This variable will hold a reference to the key event handler that will
+                                             // be called when a key is pressed.
     private Pane pane;
 
     public Pane getPacmanScreenUi() {
@@ -57,16 +58,18 @@ public class PacmanView {
 
         pane = new Pane(canvas);
         pane.setFocusTraversable(true);
-        pane.setOnKeyPressed(e -> {
+        pane.setOnKeyPressed(e -> { // Set the key event handler for the pane to call the onKeyPressed consumer when
+                                    // a key is pressed
             if (onKeyPressed != null)
                 onKeyPressed.accept(e);
         });
-        pane.requestFocus();
+        pane.requestFocus(); // Focus the pane to ensure it receives key events
 
         return pane;
     }
 
-    public void setOnKeyPressed(Consumer<KeyEvent> handler) {
+    public void setOnKeyPressed(Consumer<KeyEvent> handler) { // This method allows the controller to set the key event
+                                                              // handler that will be called when a key is pressed
         this.onKeyPressed = handler;
     }
 
@@ -89,16 +92,16 @@ public class PacmanView {
 
         Image wallImage = new Image(getClass().getResourceAsStream(IMG_WALL));
         drawMaze(gc, wallImage, gameState);
-        drawGhosts(gc, redGhost, pinkGhost, blueGhost, orangeGhost, gameState); 
+        drawGhosts(gc, redGhost, pinkGhost, blueGhost, orangeGhost, gameState);
         drawPacman(gc, pacman);
         drawHud(gc, gameState);
     }
 
     private void drawMaze(GraphicsContext gc, Image wallImage, GameState gameState) {
-        for (int r = 0; r < Maze.TILE_MAP.length; r++) {
-            String row = Maze.TILE_MAP[r];
-            for (int c = 0; c < row.length(); c++) {
-                char tile = row.charAt(c);
+        for (int r = 0; r < Maze.TILE_MAP.length; r++) { // Loop through each row of the maze
+            String row = Maze.TILE_MAP[r]; // Get the string representing the current row of the maze
+            for (int c = 0; c < row.length(); c++) { // Loop through each character in the row string
+                char tile = row.charAt(c); // Get the character representing the tile at (r, c)
 
                 if (tile == 'x') {
                     gc.drawImage(wallImage,
@@ -139,20 +142,23 @@ public class PacmanView {
         }
     }
 
-    
     private void drawGhosts(GraphicsContext gc, Ghost red, Ghost pink, Ghost blue, Ghost orange, GameState gameState) {
         int s = Ghost.SIZE;
 
         // vis scaredGhost billede hvis state er POWER, ellers normalt billede
         if (gameState.getState().equals("POWER")) {
-            if (!red.isEaten())    gc.drawImage(imgScaredGhost, red.getX(),    red.getY(),    s, s);
-            if (!pink.isEaten())   gc.drawImage(imgScaredGhost, pink.getX(),   pink.getY(),   s, s);
-            if (!blue.isEaten())   gc.drawImage(imgScaredGhost, blue.getX(),   blue.getY(),   s, s);
-            if (!orange.isEaten()) gc.drawImage(imgScaredGhost, orange.getX(), orange.getY(), s, s);
+            if (!red.isEaten())
+                gc.drawImage(imgScaredGhost, red.getX(), red.getY(), s, s);
+            if (!pink.isEaten())
+                gc.drawImage(imgScaredGhost, pink.getX(), pink.getY(), s, s);
+            if (!blue.isEaten())
+                gc.drawImage(imgScaredGhost, blue.getX(), blue.getY(), s, s);
+            if (!orange.isEaten())
+                gc.drawImage(imgScaredGhost, orange.getX(), orange.getY(), s, s);
         } else {
-            gc.drawImage(imgRedGhost,    red.getX(),    red.getY(),    s, s);
-            gc.drawImage(imgPinkGhost,   pink.getX(),   pink.getY(),   s, s);
-            gc.drawImage(imgBlueGhost,   blue.getX(),   blue.getY(),   s, s);
+            gc.drawImage(imgRedGhost, red.getX(), red.getY(), s, s);
+            gc.drawImage(imgPinkGhost, pink.getX(), pink.getY(), s, s);
+            gc.drawImage(imgBlueGhost, blue.getX(), blue.getY(), s, s);
             gc.drawImage(imgOrangeGhost, orange.getX(), orange.getY(), s, s);
         }
     }
@@ -182,13 +188,13 @@ public class PacmanView {
             gc.fillText("Lives: " + gameState.getLives(), 10, 50);
         }
 
-        //  vis POWER indikator
+        // show POWER indicator
         if (gameState.getState().equals("POWER")) {
             gc.setFill(Color.CYAN);
             gc.fillText("POWER!", 10, 80);
         }
 
-        //  vis IMMUNE indikator
+        // show IMMUNE indicator
         if (gameState.getState().equals("IMMUNE")) {
             gc.setFill(Color.WHITE);
             gc.fillText("IMMUNE", 10, 80);

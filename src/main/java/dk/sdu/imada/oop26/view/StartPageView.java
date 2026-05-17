@@ -40,8 +40,10 @@ public class StartPageView {
 
         BackgroundSize bsize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true);
         BackgroundImage backgroundImage = new BackgroundImage(pacman_thumbnail,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, bsize);
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, // Set the background position to center the
+                                                                        // image in the pane
+                BackgroundPosition.CENTER, bsize); // Set the background size to cover the entire pane while maintaining
+                                                   // the aspect ratio of the image
         pane.setBackground(new Background(backgroundImage));
 
         Label welcome_label = new Label("Welcome To Pac-Man");
@@ -49,7 +51,8 @@ public class StartPageView {
         welcome_label.setStyle("-fx-font-size: 40; -fx-text-fill: white;");
         pane.setTop(welcome_label);
 
-        BorderPane.setAlignment(enter_button, Pos.BOTTOM_CENTER);
+        BorderPane.setAlignment(enter_button, Pos.BOTTOM_CENTER); // Align the start button to the bottom center of the
+                                                                  // pane
         pane.setBottom(enter_button);
 
         return pane;

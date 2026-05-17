@@ -47,7 +47,7 @@ public class GameState {
         this.score += points;
     }
 
-    public void loseLife(long nowNs) {
+    public void loseLife(long nowNs) { // Called when Pacman collides with a ghost in NORMAL state
         this.lives--;
         if (this.lives <= 0) {
             this.gameOver = true;
@@ -65,22 +65,24 @@ public class GameState {
         pelletsEaten[row][col] = true;
     }
 
-    public boolean isCherry(int row, int col) { // Tjek om det er kirsebær
-        return row == cherryRow && col == cherryCol; // Tjekker om det er kirsebær
+    public boolean isCherry(int row, int col) { // Check if the tile at (row, col) is the cherry and has not been eaten
+        return row == cherryRow && col == cherryCol; // Check if the tile at (row, col) is the cherry and has not been
+                                                     // eaten
     }
 
-    public void eatCherry() { // Spis kirsebær
-        cherryRow = -1; // Fjern kirsebær
-        cherryCol = -1; // Fjern kirsebær
+    public void eatCherry() { // Called when Pacman eats the cherry
+        cherryRow = -1; // Move cherry off the board
+        cherryCol = -1;
     }
 
-    // Kaldes når Pacman spiser en power pellet
+    // Called Power state is activated to randomly place the cherry on an empty tile
     public void activatePower(long nowNs) {
         state = "POWER";
         powerTimer = nowNs;
     }
 
-    // Kaldes hvert frame for at tjekke om POWER eller IMMUNE er udløbet
+    // Called every tick to update the game state, such as checking if POWER or
+    // IMMUNE state should end
     public void tick(long nowNs) {
         if (state.equals("POWER") && nowNs - powerTimer >= 15_000_000_000L) {
             state = "NORMAL";
@@ -90,7 +92,8 @@ public class GameState {
         }
     }
 
-    // Returnerer sekunder tilbage i POWER state
+    // Called when POWER state is activated to randomly place the cherry on an empty
+    // tile
     public int powerSecondsLeft(long nowNs) {
         long timeLeft = 15_000_000_000L - (nowNs - powerTimer);
         return (int) Math.ceil(timeLeft / 1_000_000_000.0);

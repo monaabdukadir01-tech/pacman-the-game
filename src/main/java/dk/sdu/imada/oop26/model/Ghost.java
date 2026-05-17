@@ -29,7 +29,8 @@ public class Ghost {
     }
 
     public void update(double pacmanX, double pacmanY) {
-        // vent inde i boksen i 3 sekunder efter at være spist
+        // stay in ghost box for 10 seconds before chasing Pacman, and cannot be eaten
+        // during this time
         if (eaten) {
             if (System.nanoTime() - eatenTime >= 3_000_000_000L) {
                 eaten = false;
@@ -39,11 +40,11 @@ public class Ghost {
             return;
         }
 
-        if (startTime == -1) {
+        if (startTime == -1) { // Start timer when ghost starts moving
             startTime = System.currentTimeMillis();
         }
 
-        if (!exited && y <= 7 * Maze.TILE_SIZE) {
+        if (!exited && y <= 7 * Maze.TILE_SIZE) { // Check if ghost has exited the box (passed the exit row)
             exited = true;
         }
 
@@ -51,8 +52,8 @@ public class Ghost {
             dirX = 0;
             dirY = -1;
         } else if (scared) {
-            fleePacman(pacmanX, pacmanY); // løb væk hvis scared
-        } else if ((System.currentTimeMillis() - startTime) / 1000.0 >= 10) {
+            fleePacman(pacmanX, pacmanY); // Flee from Pacman if scared
+        } else if ((System.currentTimeMillis() - startTime) / 1000.0 >= 10) { // After 10 seconds, start chasing Pacman
             chasePacman(pacmanX, pacmanY);
         }
 
@@ -74,7 +75,7 @@ public class Ghost {
         double distanceX = Math.abs(pacmanX - x);
         double distanceY = Math.abs(pacmanY - y);
 
-        if (distanceX > distanceY) {
+        if (distanceX > distanceY) { // Prioritize horizontal movement if Pacman is farther away horizontally
             if (pacmanX > x) {
                 wantedDirX = 1;
             } else {
@@ -99,7 +100,7 @@ public class Ghost {
         }
     }
 
-    // bevæg ghost væk fra Pacman (modsat retning af chase)
+    // Move ghost away from Pacman when scared
     private void fleePacman(double pacmanX, double pacmanY) {
         int wantedDirX = 0;
         int wantedDirY = 0;
@@ -130,7 +131,7 @@ public class Ghost {
             dirX = wantedDirX;
             dirY = wantedDirY;
         } else {
-            pickRandomDirection(); // vælg tilfældig retning hvis vej er blokeret
+            pickRandomDirection(); // If the desired direction is blocked, pick a random direction to flee
         }
     }
 
@@ -142,18 +143,19 @@ public class Ghost {
             return true;
         }
 
-        // Hvis ghost er ude af boksen, må den ikke komme ind igen
+        // Allow ghosts to pass through the exit area of the ghost box without treating
+        // it as a wall
         if (exited && tileY >= 7 && tileY <= 12 && tileX >= 26 && tileX <= 35) {
             return true;
         }
 
         char tile = Maze.TILE_MAP[tileY].charAt(tileX);
 
-        // 'x' er væg, 'O' er power pellet og behandles også som væg for ghosts
-        return tile == 'x' || tile == 'O';
+        return tile == 'x' || tile == 'O'; // Treat 'O' as a wall for ghosts to prevent them from getting stuck in the
+                                           // box
     }
 
-    // kaldes når Pacman spiser ghost i POWER state
+    // Called when Pacman eats a ghost in POWER state
     public void getEaten() {
         eaten = true;
         eatenTime = System.nanoTime();
@@ -179,7 +181,7 @@ public class Ghost {
         pickRandomDirection();
     }
 
-    private void pickRandomDirection() {
+    private void pickRandomDirection() { // Pick a random direction to move when hitting a wall
         int random = (int) (Math.random() * 4);
         switch (random) {
             case 0 -> {
