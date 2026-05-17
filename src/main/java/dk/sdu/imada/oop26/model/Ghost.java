@@ -18,7 +18,11 @@ public class Ghost {
     private boolean exited = false;
 
     private boolean scared = false;
+<<<<<<< HEAD
     private boolean eaten = false;
+=======
+    private boolean eaten  = false;
+>>>>>>> main
     private long eatenTime = 0;
 
     public Ghost(int startCol) {
@@ -29,12 +33,20 @@ public class Ghost {
     }
 
     public void update(double pacmanX, double pacmanY) {
+<<<<<<< HEAD
         // stay in ghost box for 10 seconds before chasing Pacman, and cannot be eaten
         // during this time
         if (eaten) {
             if (System.nanoTime() - eatenTime >= 3_000_000_000L) {
                 eaten = false;
                 exited = false;
+=======
+        // Vent inde i boksen i 3 sekunder efter at være spist
+        if (eaten) {
+            if (System.nanoTime() - eatenTime >= 3_000_000_000L) {
+                eaten     = false;
+                exited    = false;
+>>>>>>> main
                 startTime = -1;
             }
             return;
@@ -49,11 +61,22 @@ public class Ghost {
         }
 
         if (!exited) {
+            // Bevæg ud af boksen
             dirX = 0;
             dirY = -1;
         } else if (scared) {
+<<<<<<< HEAD
             fleePacman(pacmanX, pacmanY); // Flee from Pacman if scared
         } else if ((System.currentTimeMillis() - startTime) / 1000.0 >= 10) { // After 10 seconds, start chasing Pacman
+=======
+            // Kun skift retning hvis ghost rammer en væg
+            double newX = x + dirX * speed;
+            double newY = y + dirY * speed;
+            if (isWall(newX, newY)) {
+                fleePacman(pacmanX, pacmanY);
+            }
+        } else if ((System.currentTimeMillis() - startTime) / 1000.0 >= 10) {
+>>>>>>> main
             chasePacman(pacmanX, pacmanY);
         }
 
@@ -68,7 +91,12 @@ public class Ghost {
         }
     }
 
+<<<<<<< HEAD
     private void chasePacman(double pacmanX, double pacmanY) { // Move ghost towards Pacman
+=======
+    // Bevæger ghost mod Pacman
+    private void chasePacman(double pacmanX, double pacmanY) {
+>>>>>>> main
         int wantedDirX = 0;
         int wantedDirY = 0;
 
@@ -100,6 +128,7 @@ public class Ghost {
         }
     }
 
+<<<<<<< HEAD
     // Move ghost away from Pacman when scared
     private void fleePacman(double pacmanX, double pacmanY) {
         int wantedDirX = 0;
@@ -133,6 +162,14 @@ public class Ghost {
         } else {
             pickRandomDirection(); // If the desired direction is blocked, pick a random direction to flee
         }
+=======
+    // Bevæger ghost væk fra Pacman og finder altid en fri retning
+    private void fleePacman(double pacmanX, double pacmanY) {
+        if (!isWall(x + speed, y))  { dirX =  1; dirY =  0; }
+        else if (!isWall(x - speed, y))  { dirX = -1; dirY =  0; }
+        else if (!isWall(x, y - speed))  { dirX =  0; dirY = -1; }
+        else if (!isWall(x, y + speed))  { dirX =  0; dirY =  1; }
+>>>>>>> main
     }
 
     private boolean isWall(double newX, double newY) {
@@ -151,11 +188,18 @@ public class Ghost {
 
         char tile = Maze.TILE_MAP[tileY].charAt(tileX);
 
+<<<<<<< HEAD
         return tile == 'x' || tile == 'O'; // Treat 'O' as a wall for ghosts to prevent them from getting stuck in the
                                            // box
     }
 
     // Called when Pacman eats a ghost in POWER state
+=======
+        return tile == 'x' || tile == 'O';
+    }
+
+    // Kaldes når Pacman spiser ghost i POWER state
+>>>>>>> main
     public void getEaten() {
         eaten = true;
         eatenTime = System.nanoTime();
@@ -183,6 +227,7 @@ public class Ghost {
 
     private void pickRandomDirection() { // Pick a random direction to move when hitting a wall
         int random = (int) (Math.random() * 4);
+<<<<<<< HEAD
         switch (random) {
             case 0 -> {
                 dirX = 1;
@@ -200,6 +245,18 @@ public class Ghost {
                 dirX = 0;
                 dirY = 1;
             }
+=======
+
+        if (random == 0) { dirX =  1; dirY =  0; }
+        if (random == 1) { dirX = -1; dirY =  0; }
+        if (random == 2) { dirX =  0; dirY = -1; }
+        if (random == 3) { dirX =  0; dirY =  1; }
+
+        // Hvis den valgte retning er en væg, prøv ned i stedet
+        if (isWall(x + dirX * speed, y + dirY * speed)) {
+            dirX = 0;
+            dirY = 1;
+>>>>>>> main
         }
     }
 
@@ -210,8 +267,13 @@ public class Ghost {
         this.dirY = -1;
         this.exited = false;
         this.startTime = -1;
+<<<<<<< HEAD
         this.eaten = false;
         this.scared = false;
+=======
+        this.eaten     = false;
+        this.scared    = false;
+>>>>>>> main
     }
 
     public double getX() {
